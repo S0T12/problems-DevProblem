@@ -1,26 +1,36 @@
 import { Injectable } from '@nestjs/common';
 import { CreateProblemDto } from './dto/create-problem.dto';
 import { UpdateProblemDto } from './dto/update-problem.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Problem } from './schemas/problem.schema';
+import { Model } from 'mongoose';
+import { ObjectId } from 'mongodb';
 
 @Injectable()
 export class ProblemsService {
-  create(createProblemDto: CreateProblemDto) {
-    return 'This action adds a new problem';
+  constructor(@InjectModel(Problem.name) private ProbmeModel: Model<Problem>) {}
+  async create(createProblemDto: CreateProblemDto) {
+    try {
+      const problem = new this.ProbmeModel(createProblemDto);
+      await problem.save();
+    } catch (error) {
+      throw error;
+    }
   }
 
-  findAll() {
-    return `This action returns all problems`;
+  async findAll() {
+    return await this.ProbmeModel.find().exec();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} problem`;
+  async findOne(id: ObjectId) {
+    return await this.ProbmeModel.findById(id).exec();
   }
 
-  update(id: number, updateProblemDto: UpdateProblemDto) {
-    return `This action updates a #${id} problem`;
+  async update(id: ObjectId, updateProblemDto: UpdateProblemDto) {
+    return await this.ProbmeModel.updateOne(id, updateProblemDto).exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} problem`;
+  async remove(id: ObjectId): Promise<any> {
+    return await this.ProbmeModel.deleteOne(id);
   }
 }
