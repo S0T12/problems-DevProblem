@@ -5,13 +5,13 @@ export type ProblemDocument = HydratedDocument<Problem>;
 
 @Schema()
 export class Problem {
-  @Prop()
+  @Prop({ required: true })
   title: string;
 
-  @Prop()
+  @Prop({ required: true })
   description: string;
 
-  @Prop()
+  @Prop({ required: true })
   creator: string;
 
   @Prop()
