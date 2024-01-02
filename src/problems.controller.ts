@@ -25,8 +25,10 @@ export class ProblemsController {
   }
 
   @MessagePattern('updateProblem')
-  update(@Payload() updateProblemDto: UpdateProblemDto) {
-    return this.problemsService.update(updateProblemDto.id, updateProblemDto);
+  update(
+    @Payload() payload: { id: ObjectId; updateProblemDto: UpdateProblemDto },
+  ) {
+    return this.problemsService.update(payload.id, payload.updateProblemDto);
   }
 
   @MessagePattern('removeProblem')
