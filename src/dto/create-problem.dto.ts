@@ -1,12 +1,15 @@
-import { IsString } from 'class-validator';
+import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateProblemDto {
-  @IsString()
+  @IsString({ message: 'Title must be a string' })
+  @IsNotEmpty({ message: 'Title is required' })
   title: string;
 
-  @IsString()
+  @IsString({ message: 'Description must be a string' })
+  @IsNotEmpty({ message: 'Description is required' })
   description: string;
 
-  @IsString()
+  @IsString({ message: 'Creator must be a string' })
+  @IsNotEmpty({ message: 'Creator is required' })
   creator: string;
 }
