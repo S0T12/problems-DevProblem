@@ -6,17 +6,26 @@ import { Problem } from './schemas/problem.schema';
 import { Model } from 'mongoose';
 import { ObjectId } from 'mongodb';
 import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ProblemsService {
   constructor(
     @InjectModel(Problem.name) private ProblemModel: Model<Problem>,
     @Inject('USERS_SERVICE') private readonly client: ClientProxy,
-  ) {}
+  ) {
+    this.client.connect();
+  }
   async create(createProblemDto: CreateProblemDto): Promise<Problem> {
     try {
-      const problem = new this.ProblemModel(createProblemDto);
-      return await problem.save();
+      const user = await firstValueFrom(
+        this.client.send<string>('findByUsername', createProblemDto.creator),
+      );
+
+      if (!user) throw new BadRequestException('User not exists');
+
+      const problem = new this.ProblemModel(createProblemDto).save();
+      return problem;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
