@@ -15,9 +15,6 @@ export class Problem {
   creator: string;
 
   @Prop()
-  ideas: string[];
-
-  @Prop()
   createdAt: Date;
 
   @Prop()
