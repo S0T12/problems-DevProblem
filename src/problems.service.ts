@@ -25,7 +25,7 @@ export class ProblemsService {
       if (!user) throw new BadRequestException('User not exists');
 
       const problem = new this.ProblemModel(createProblemDto).save();
-      return problem;
+      return await problem;
     } catch (error) {
       throw new BadRequestException(error.message);
     }
