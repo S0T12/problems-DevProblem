@@ -10,29 +10,32 @@ export class ProblemsController {
   constructor(private readonly problemsService: ProblemsService) {}
 
   @MessagePattern('createProblem')
-  create(@Payload() createProblemDto: CreateProblemDto) {
-    return this.problemsService.create(createProblemDto);
+  async create(@Payload() createProblemDto: CreateProblemDto) {
+    return await this.problemsService.create(createProblemDto);
   }
 
   @MessagePattern('findAllProblems')
-  findAll() {
-    return this.problemsService.findAll();
+  async findAll() {
+    return await this.problemsService.findAll();
   }
 
   @MessagePattern('findOneProblem')
-  findOne(@Payload() id: ObjectId) {
-    return this.problemsService.findOne(id);
+  async findOne(@Payload() id: ObjectId) {
+    return await this.problemsService.findOne(id);
   }
 
   @MessagePattern('updateProblem')
-  update(
+  async update(
     @Payload() payload: { id: ObjectId; updateProblemDto: UpdateProblemDto },
   ) {
-    return this.problemsService.update(payload.id, payload.updateProblemDto);
+    return await this.problemsService.update(
+      payload.id,
+      payload.updateProblemDto,
+    );
   }
 
   @MessagePattern('removeProblem')
-  remove(@Payload() id: ObjectId): Promise<any> {
-    return this.problemsService.remove(id);
+  async remove(@Payload() id: ObjectId): Promise<any> {
+    return await this.problemsService.remove(id);
   }
 }
