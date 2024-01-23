@@ -37,7 +37,9 @@ export class ProblemsService {
     }
   }
 
-  async create(createProblemDto: CreateProblemDto): Promise<Problem> {
+  async create(
+    createProblemDto: CreateProblemDto,
+  ): Promise<Problem | BadRequestException> {
     try {
       if (!this.isConnected) {
         this.logger.warn('Client is not connected!');
@@ -50,7 +52,7 @@ export class ProblemsService {
         ),
       );
 
-      if (!user) throw new BadRequestException('User not exists');
+      if (!user) return new BadRequestException('User not exists');
 
       const problem = new this.ProblemModel(createProblemDto).save();
       return await problem;
